@@ -1,0 +1,7 @@
+FROM alpine
+COPY http-load-generator /
+COPY LICENSE /
+ENTRYPOINT ["/http-load-generator"]
+CMD ["-h"]
+USER 1022:1022
+EXPOSE 8080

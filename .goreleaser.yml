@@ -1,0 +1,45 @@
+project_name: http-load-generator
+builds:
+  - id: http-load-generator
+    binary: http-load-generator
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
+    goos:
+      - windows
+      - darwin
+      - linux
+
+    goarch:
+      - amd64
+archives:
+  - id: windows
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+dockers:
+  - goos: linux
+    goarch: amd64
+    binaries:
+      - http-load-generator
+    image_templates:
+      - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:latest"
+      - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:{{ .Major }}.{{ .Minor }}"
+      - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:{{ .Tag }}"
+    dockerfile: Dockerfile.goreleaser
+    builds:
+      - http-load-generator
+    extra_files:
+      - LICENSE
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.licenses=Apache-2.0"
+    skip_push: auto
+release:
+  draft: true
