@@ -17,6 +17,13 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
+        name: GitHub Packages Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: docker.pkg.github.com
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
