@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func load(_ http.ResponseWriter, _ *http.Request) {
+func load(response http.ResponseWriter, _ *http.Request) {
 	done := make(chan int)
 
 	for i := 0; i < runtime.NumCPU(); i++ {
@@ -24,9 +24,17 @@ func load(_ http.ResponseWriter, _ *http.Request) {
 
 	time.Sleep(time.Second * 10)
 	close(done)
+	_, err := response.Write([]byte("Load generation done."))
+	if err != nil {
+		log.Printf("failed to write response (%v)", err)
+	}
 }
 
-func health(_ http.ResponseWriter, _ *http.Request) {
+func health(response http.ResponseWriter, _ *http.Request) {
+	_, err := response.Write([]byte("OK"))
+	if err != nil {
+		log.Printf("failed to write response (%v)", err)
+	}
 }
 
 func main() {

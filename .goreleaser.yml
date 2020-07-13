@@ -26,6 +26,9 @@ dockers:
     binaries:
       - http-load-generator
     image_templates:
+      - "janoszen/http-load-generator:latest"
+      - "janoszen/http-load-generator:{{ .Major }}.{{ .Minor }}"
+      - "janoszen/http-load-generator:{{ .Tag }}"
       - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:latest"
       - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:{{ .Major }}.{{ .Minor }}"
       - "docker.pkg.github.com/janoszen/http-load-generator/{{.ProjectName}}:{{ .Tag }}"
